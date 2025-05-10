@@ -1,0 +1,357 @@
+
+
+
+// // import React, { useState } from 'react';
+// // import axios from 'axios';
+// // import { Info } from 'lucide-react';
+// // import { motion } from 'framer-motion';
+
+// // const AtsChecker = () => {
+// //   const [resume, setResume] = useState(null);
+// //   const [jobDescription, setJobDescription] = useState('');
+// //   const [score, setScore] = useState(null);
+// //   const [message, setMessage] = useState('');
+// //   const [jobRecommendations, setJobRecommendations] = useState([]);
+// //   const [loading, setLoading] = useState(false);
+// //   const [fetchingJobs, setFetchingJobs] = useState(false);
+
+// //   const handleFileChange = (e) => setResume(e.target.files[0]);
+// //   const handleDescriptionChange = (e) => setJobDescription(e.target.value);
+
+// //   const handleSubmit = async (e) => {
+// //     e.preventDefault();
+// //     if (!resume || !jobDescription) return alert('Please upload a resume and enter a job description.');
+
+// //     setLoading(true);
+// //     const formData = new FormData();
+// //     formData.append('resume', resume);
+// //     formData.append('jobDescription', jobDescription);
+
+// //     try {
+// //       const res = await axios.post('http://localhost:3000/api/ats-check', formData);
+// //       setScore(res.data.score);
+// //       setMessage(res.data.message);
+// //       setJobRecommendations(res.data.recommendations || []);
+// //     } catch (error) {
+// //       alert('Error checking ATS score. Please try again.');
+// //       console.error(error);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   const fetchJobRecommendations = async () => {
+// //     if (!score || !jobDescription) return;
+// //     setFetchingJobs(true);
+
+// //     try {
+// //       const res = await axios.post('http://localhost:3000/api/job-recommendations', {
+// //         score,
+// //         jobDescription
+// //       });
+// //       setJobRecommendations(res.data.recommendations || []);
+// //     } catch (error) {
+// //       alert('Error fetching job recommendations. Please try again.');
+// //       console.error(error);
+// //     } finally {
+// //       setFetchingJobs(false);
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+// //       <motion.div 
+// //         initial={{ opacity: 0, scale: 0.9 }} 
+// //         animate={{ opacity: 1, scale: 1 }} 
+// //         transition={{ duration: 0.5 }}
+// //         className="bg-white shadow-xl rounded-2xl p-8 max-w-lg w-full">
+// //         <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-6">ATS Score Checker</h1>
+// //         <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300">
+// //           <h2 className="text-2xl font-bold text-blue-800 flex items-center">
+// //             <Info className="w-6 h-6 mr-2" /> How Smart ATS Works 
+// //           </h2>
+// //           <p className="text-gray-700 mt-2 text-sm">
+// //             Smart Ats analyzes your resume against the job description, evaluating factors like keyword alignment, experience relevance, and skill match. It generates an ATS score, offers personalized feedback, and recommends jobs tailored to your profile.
+// //           </p>
+// //         </div>
+// //         <form onSubmit={handleSubmit} className="space-y-4">
+// //           <input 
+// //             type="file" 
+// //             accept="application/pdf" 
+// //             onChange={handleFileChange} 
+// //             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+// //             required 
+// //           />
+// //           <textarea 
+// //             value={jobDescription} 
+// //             onChange={handleDescriptionChange} 
+// //             placeholder="Paste Job Description here..." 
+// //             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 h-40" 
+// //             required
+// //           />
+// //           <motion.button 
+// //             type="submit" 
+// //             className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center justify-center" 
+// //             disabled={loading}
+// //             whileTap={{ scale: 0.95 }}
+// //             whileHover={{ scale: 1.05 }}
+// //           >
+// //             {loading ? (
+// //               <motion.div 
+// //                 animate={{ rotate: 360 }} 
+// //                 transition={{ repeat: Infinity, duration: 1 }}
+// //                 className="border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"
+// //               />
+// //             ) : 'Check Score'}
+// //           </motion.button>
+// //         </form>
+
+// //         {score !== null && score !== undefined && (
+// //           <motion.div 
+// //             initial={{ opacity: 0, y: 20 }} 
+// //             animate={{ opacity: 1, y: 0 }} 
+// //             transition={{ duration: 0.5 }}
+// //             className="mt-6 p-4 bg-green-100 border-l-4 border-green-500 rounded-lg">
+// //             <motion.h2
+// //               initial={{ scale: 0.8, opacity: 0 }}
+// //               animate={{ scale: 1.2, opacity: 1 }}
+// //               transition={{ type: 'spring', stiffness: 100 }}
+// //               className="text-5xl font-extrabold text-center text-purple-700 drop-shadow-lg mb-4 animate-pulse"
+// //             >
+// //               ATS Score: {score}
+// //             </motion.h2>
+            
+// //             <div className="mt-4 p-4 bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out space-y-4">
+// //               {message.split('\n').map((line, index) => (
+// //                 <p key={index} className={
+// //                   line.startsWith('**')
+// //                     ? 'text-lg font-semibold text-blue-700 mt-2'
+// //                     : line.startsWith('*')
+// //                     ? 'text-sm text-gray-700 pl-4 border-l-2 border-blue-500 ml-2'
+// //                     : 'text-sm text-gray-700'
+// //                 }>
+// //                   {line.replace(/\*\*/g, '')}
+// //                 </p>
+// //               ))}
+// //               <button 
+// //               onClick={fetchJobRecommendations} 
+// //               className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 mt-4"
+// //               disabled={fetchingJobs}
+// //             >
+// //               {fetchingJobs ? 'Fetching Jobs...' : 'View Recommended Jobs'}
+// //             </button>
+// //             </div>
+// //             {jobRecommendations.length > 0 && (
+// //               <div className="mt-6 p-4 bg-blue-100 border-l-4 border-blue-500 rounded-lg">
+// //                 <h3 className="text-2xl font-bold text-blue-700">Recommended Jobs:</h3>
+// //                 <ul className="list-disc list-inside text-gray-700 mt-2">
+// //                   {jobRecommendations.map((job, index) => (
+// //                     <li key={index}>{job}</li>
+// //                   ))}
+// //                 </ul>
+// //               </div>
+// //             )}
+// //           </motion.div>
+// //         )}
+// //       </motion.div>
+// //     </div>
+// //   );
+// // };
+
+// // export default AtsChecker;
+
+
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import { useDropzone } from 'react-dropzone';
+// import { Info } from 'lucide-react';
+// import { motion } from 'framer-motion';
+// import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+// import 'react-circular-progressbar/dist/styles.css';
+
+// const AtsChecker = () => {
+//   const [resume, setResume] = useState(null);
+//   const [jobDescription, setJobDescription] = useState('');
+//   const [score, setScore] = useState(null);
+//   const [message, setMessage] = useState('');
+//   const [jobRecommendations, setJobRecommendations] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [fetchingJobs, setFetchingJobs] = useState(false);
+//   const [showModal, setShowModal] = useState(false);
+
+//   const { getRootProps, getInputProps, isDragActive } = useDropzone({
+//     onDrop: (acceptedFiles) => setResume(acceptedFiles[0]),
+//     accept: { 'application/pdf': ['.pdf'] },
+//   });
+
+//   const handleDescriptionChange = (e) => setJobDescription(e.target.value);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!resume || !jobDescription) return alert('Please upload a resume and enter a job description.');
+
+//     setLoading(true);
+//     const formData = new FormData();
+//     formData.append('resume', resume);
+//     formData.append('jobDescription', jobDescription);
+
+//     try {
+//       const res = await axios.post('http://localhost:3000/api/ats-check', formData);
+//       setScore(res.data.score);
+//       setMessage(res.data.message);
+//       setJobRecommendations(res.data.recommendations || []);
+//     } catch (error) {
+//       alert('Error checking ATS score. Please try again.');
+//       console.error(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const fetchJobRecommendations = async () => {
+//     if (!score || !jobDescription) return;
+//     setFetchingJobs(true);
+
+//     try {
+//       const res = await axios.post('http://localhost:3000/api/job-recommendations', {
+//         score,
+//         jobDescription
+//       });
+//       setJobRecommendations(res.data.recommendations || []);
+//       setShowModal(true);
+//     } catch (error) {
+//       alert('Error fetching job recommendations. Please try again.');
+//       console.error(error);
+//     } finally {
+//       setFetchingJobs(false);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+//       <motion.div 
+//         initial={{ opacity: 0, scale: 0.9 }} 
+//         animate={{ opacity: 1, scale: 1 }} 
+//         transition={{ duration: 0.5 }}
+//         className="bg-white shadow-xl rounded-2xl p-8 max-w-lg w-full">
+        
+//         <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-6">ATS Score Checker</h1>
+
+//         <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg shadow-md">
+//           <h2 className="text-2xl font-bold text-blue-800 flex items-center">
+//             <Info className="w-6 h-6 mr-2" /> How Smart ATS Works 
+//           </h2>
+//           <p className="text-gray-700 mt-2 text-sm">
+//             Smart Ats analyzes your resume against the job description, evaluating factors like keyword alignment, experience relevance, and skill match. It generates an ATS score, offers personalized feedback, and recommends jobs tailored to your profile.
+//           </p>
+//         </div>
+
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <div 
+//             {...getRootProps()} 
+//             className={`border-2 border-dashed p-6 rounded-xl text-center cursor-pointer transition ${
+//               isDragActive ? 'bg-blue-100 border-blue-500' : 'border-gray-300 bg-white'
+//             }`}
+//           >
+//             <input {...getInputProps()} />
+//             {resume ? (
+//               <p className="text-sm font-medium text-blue-600">📄 {resume.name}</p>
+//             ) : (
+//               <p className="text-sm text-gray-500">Drag & drop your resume here, or click to upload (PDF only)</p>
+//             )}
+//           </div>
+
+//           <textarea 
+//             value={jobDescription} 
+//             onChange={handleDescriptionChange} 
+//             placeholder="Paste Job Description here..." 
+//             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 h-40" 
+//             required
+//           />
+
+//           <motion.button 
+//             type="submit" 
+//             className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center justify-center" 
+//             disabled={loading}
+//             whileTap={{ scale: 0.95 }}
+//             whileHover={{ scale: 1.05 }}
+//           >
+//             {loading ? (
+//               <motion.div 
+//                 animate={{ rotate: 360 }} 
+//                 transition={{ repeat: Infinity, duration: 1 }}
+//                 className="border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"
+//               />
+//             ) : 'Check Score'}
+//           </motion.button>
+//         </form>
+
+//         {score !== null && score !== undefined && (
+//           <motion.div 
+//             initial={{ opacity: 0, y: 20 }} 
+//             animate={{ opacity: 1, y: 0 }} 
+//             transition={{ duration: 0.5 }}
+//             className="mt-6 p-4 bg-green-100 border-l-4 border-green-500 rounded-lg">
+            
+//             <div className="w-40 mx-auto mb-4">
+//               <CircularProgressbar 
+//                 value={score} 
+//                 text={`${score}%`} 
+//                 styles={buildStyles({
+//                   textColor: '#7e22ce',
+//                   pathColor: '#7e22ce',
+//                   trailColor: '#e5e7eb',
+//                   textSize: '18px'
+//                 })}
+//               />
+//             </div>
+
+//             <div className="mt-4 p-4 bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-lg space-y-4">
+//               {message.split('\n').map((line, index) => (
+//                 <p key={index} className={
+//                   line.startsWith('**')
+//                     ? 'text-lg font-semibold text-blue-700 mt-2'
+//                     : line.startsWith('*')
+//                     ? 'text-sm text-gray-700 pl-4 border-l-2 border-blue-500 ml-2'
+//                     : 'text-sm text-gray-700'
+//                 }>
+//                   {line.replace(/\*\*/g, '')}
+//                 </p>
+//               ))}
+
+//               <button 
+//                 onClick={fetchJobRecommendations} 
+//                 className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 mt-4"
+//                 disabled={fetchingJobs}
+//               >
+//                 {fetchingJobs ? 'Fetching Recommendations...' : 'View Recommended Jobs'}
+//               </button>
+//             </div>
+//           </motion.div>
+//         )}
+//       </motion.div>
+
+//       {/* Modal */}
+//       {showModal && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+//           <div className="bg-white rounded-2xl shadow-xl p-6 max-w-lg w-full relative">
+//             <button 
+//               onClick={() => setShowModal(false)} 
+//               className="absolute top-3 right-3 text-gray-500 hover:text-black"
+//             >
+//               ✕
+//             </button>
+//             <h2 className="text-2xl font-bold text-blue-700 mb-4">Recommended Jobs</h2>
+//             <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm max-h-60 overflow-y-auto">
+//               {jobRecommendations.map((job, index) => (
+//                 <li key={index}>{job}</li>
+//               ))}
+//             </ul>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AtsChecker;
