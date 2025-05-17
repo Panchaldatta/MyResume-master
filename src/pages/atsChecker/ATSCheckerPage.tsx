@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { Info, Upload, FileText, Loader2, Sparkles } from 'lucide-react';
@@ -46,7 +46,7 @@ const AtsChecker = () => {
         score,
         jobDescription,
         recommendations,
-      });
+      }); 
 
     } catch (error) {
       alert('Error checking ATS score. Please try again.');
